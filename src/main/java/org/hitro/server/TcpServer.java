@@ -2,6 +2,7 @@ package org.hitro.server;
 
 import org.hitro.conn.ConnectionHandler;
 import org.hitro.exceptions.HymQueueException;
+import org.hitro.services.ConnectionExecutors;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -17,8 +18,7 @@ public class TcpServer {
         while(true){
             try{
                 Socket socket =  this.serverSocket.accept();
-                Thread newConnectionHandlerThread = new Thread(new ConnectionHandler(socket));
-                newConnectionHandlerThread.start();
+                ConnectionExecutors.getInstance().addConnection(new ConnectionHandler(socket));
             }
             catch (IOException ioe){
                 throw new HymQueueException("Failed to accept socket connection",ioe);
