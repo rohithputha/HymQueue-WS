@@ -6,7 +6,7 @@ import org.hitro.exceptions.HymQueueException;
 import java.util.List;
 
 public class CommandOrchestrator {
-
+    private
     private <T,V> List<T> decode(byte[] command){
         V commandList = (V) IBinaryProtocol.getInstance().decode(command);
         if(!(commandList instanceof List)){
