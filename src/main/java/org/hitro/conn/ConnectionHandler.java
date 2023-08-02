@@ -3,10 +3,12 @@ package org.hitro.conn;
 import org.hitro.constants.Constants;
 import org.hitro.exceptions.HymQueueException;
 import org.hitro.publicinterfaces.HymQueue;
+import org.hitro.services.CommandOrchestrator;
 
 import javax.sound.sampled.Line;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,9 +17,11 @@ public class ConnectionHandler implements Runnable{
 
     private final Socket socket;
     private final HymQueue hymQueue;
+    private final CommandOrchestrator commandOrchestrator;
     public ConnectionHandler(Socket socket, HymQueue hymQueue){
         this.socket = socket;
         this.hymQueue = hymQueue;
+        this.commandOrchestrator = new CommandOrchestrator(hymQueue);
     }
 
     public byte[] convertToByteArray(List<Byte> byteList){
@@ -29,13 +33,14 @@ public class ConnectionHandler implements Runnable{
         return newByteArray;
     }
 
-    private byte[] decodeAndExecuteCommand(byte[] commnand,){
-
+    private byte[] decodeAndExecuteCommand(byte[] commnand){
+        return commandOrchestrator.orchestrate(commnand);
     }
     @Override
     public void run() {
         try {
             InputStream inputStream = socket.getInputStream();
+            OutputStream outputStream = socket.getOutputStream();
             List<Byte> inputCommandsByteList = new ArrayList<>();
             int byteRead;
             while((byteRead = inputStream.read())!=-1){
@@ -46,6 +51,7 @@ public class ConnectionHandler implements Runnable{
                 ){
                     byte[] newCommand = this.convertToByteArray(inputCommandsByteList);
                     inputCommandsByteList = new ArrayList<>();
+                    outputStream.write(decodeAndExecuteCommand(newCommand));
                 }
             }
         } catch (IOException e) {
