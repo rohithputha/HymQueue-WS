@@ -39,6 +39,7 @@ public class ConnectionHandler implements Runnable{
     @Override
     public void run() {
         try {
+            System.out.println("<><><><><><><> connection started");
             InputStream inputStream = socket.getInputStream();
             OutputStream outputStream = socket.getOutputStream();
             List<Byte> inputCommandsByteList = new ArrayList<>();
@@ -50,8 +51,11 @@ public class ConnectionHandler implements Runnable{
                         inputCommandsByteList.get(inputCommandsByteList.size()-1)==Constants.getCommandSeperator()[1]
                 ){
                     byte[] newCommand = this.convertToByteArray(inputCommandsByteList);
+                    System.out.println("<><><><><><> input byte command length "+ newCommand.length);
                     inputCommandsByteList = new ArrayList<>();
-                    outputStream.write(decodeAndExecuteCommand(newCommand));
+                    byte[] res = decodeAndExecuteCommand(newCommand);
+
+                    outputStream.write(res);
                 }
             }
         } catch (IOException e) {

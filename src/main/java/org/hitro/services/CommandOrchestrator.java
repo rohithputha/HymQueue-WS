@@ -37,7 +37,7 @@ public class CommandOrchestrator {
 
         try{
             List<T> commandList = this.decode(command);
-            String commandName = (String) commandList.get(1);
+            String commandName = (String) commandList.get(0);
             List<String> res = commandExecutorMap.get(commandName).execute(commandList,this.hymQueue);
             return encode(res);
         }

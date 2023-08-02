@@ -21,6 +21,7 @@ public class TcpServer {
         while(true){
             try{
                 Socket socket =  this.serverSocket.accept();
+                System.out.println("connect request received");
                 ConnectionExecutors.getInstance().addConnection(new ConnectionHandler(socket, this.hymQueue));
             }
             catch (IOException ioe){
@@ -35,8 +36,8 @@ public class TcpServer {
     private static TcpServer tcpServer;
     public static TcpServer getInstance(){
         if(tcpServer == null){
-            synchronized (tcpServer){
-                if(tcpServer== null){
+            synchronized (TcpServer.class){
+                if(tcpServer == null){
                     try {
                         tcpServer = new TcpServer(new ServerSocket(3456), new HymQueue());
                     } catch (IOException e) {
