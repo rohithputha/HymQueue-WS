@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class CreateChannelCommandExecutor<V> implements CommandExecutor<List<String>, V>{
+public class CreateChannelCommandExecutor<V> implements CommandExecutor<V>{
     @Override
     public List<String> execute(List<V> command, HymQueue hymQueue) {
         try{

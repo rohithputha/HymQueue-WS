@@ -2,6 +2,7 @@ package org.hitro.conn;
 
 import org.hitro.constants.Constants;
 import org.hitro.exceptions.HymQueueException;
+import org.hitro.publicinterfaces.HymQueue;
 
 import javax.sound.sampled.Line;
 import java.io.IOException;
@@ -12,9 +13,11 @@ import java.util.List;
 
 public class ConnectionHandler implements Runnable{
 
-    private Socket socket;
-    public ConnectionHandler(Socket socket){
+    private final Socket socket;
+    private final HymQueue hymQueue;
+    public ConnectionHandler(Socket socket, HymQueue hymQueue){
         this.socket = socket;
+        this.hymQueue = hymQueue;
     }
 
     public byte[] convertToByteArray(List<Byte> byteList){
@@ -26,7 +29,7 @@ public class ConnectionHandler implements Runnable{
         return newByteArray;
     }
 
-    private byte[] decodeAndExecuteCommand(byte[] commnand){
+    private byte[] decodeAndExecuteCommand(byte[] commnand,){
 
     }
     @Override
