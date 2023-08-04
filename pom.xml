@@ -14,23 +14,17 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
-    <repositories>
-        <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
-        </repository>
-    </repositories>
 
     <dependencies>
         <dependency>
-            <groupId>org.hitro</groupId>
+            <groupId>com.github.rohithputha</groupId>
             <artifactId>HymQueue</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>87b4dabb36</version>
         </dependency>
         <dependency>
             <groupId>com.github.rohithputha</groupId>
             <artifactId>HymProtocol</artifactId>
-<!--            <version>SNAPSHOT</version>-->
+            <version>953fb36f</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -41,4 +35,10 @@
     </dependencies>
 
 
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
 </project>

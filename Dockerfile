@@ -15,7 +15,7 @@ RUN apt-get update && \
 RUN mvn clean install
 
 # Expose the port that the Java application listens on (change this to your application's port)
-EXPOSE 8080
+EXPOSE 3456
 
 # Run the Java application
 CMD ["java", "-jar", "target/your-jar-file.jar"]
