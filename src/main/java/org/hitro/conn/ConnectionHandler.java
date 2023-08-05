@@ -5,7 +5,6 @@ import org.hitro.exceptions.HymQueueException;
 import org.hitro.publicinterfaces.HymQueue;
 import org.hitro.services.CommandOrchestrator;
 
-import javax.sound.sampled.Line;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;

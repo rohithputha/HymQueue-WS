@@ -1,8 +1,8 @@
 package org.hitro.server;
 
 import org.hitro.conn.ConnectionHandler;
-import org.hitro.exceptions.HymQueueException;
 import org.hitro.publicinterfaces.HymQueue;
+import org.hitro.exceptions.HymQueueException;
 import org.hitro.services.ConnectionExecutors;
 
 import java.io.IOException;
@@ -18,6 +18,7 @@ public class TcpServer {
     }
 
     public void listen(){
+        System.out.println("server listening");
         while(true){
             try{
                 Socket socket =  this.serverSocket.accept();
