@@ -17,10 +17,13 @@ public class ConnectionHandler implements Runnable{
     private final Socket socket;
     private final HymQueue hymQueue;
     private final CommandOrchestrator commandOrchestrator;
+
+    private long lastActivityTime;
     public ConnectionHandler(Socket socket, HymQueue hymQueue){
         this.socket = socket;
         this.hymQueue = hymQueue;
         this.commandOrchestrator = new CommandOrchestrator(hymQueue);
+        lastActivityTime =  System.currentTimeMillis();
     }
 
     public byte[] convertToByteArray(List<Byte> byteList){
@@ -32,8 +35,17 @@ public class ConnectionHandler implements Runnable{
         return newByteArray;
     }
 
+
     private byte[] decodeAndExecuteCommand(byte[] commnand){
         return commandOrchestrator.orchestrate(commnand);
+    }
+
+    private synchronized void updateTime(){
+       this.lastActivityTime = System.currentTimeMillis();
+    }
+
+    public synchronized long getIdleTime(){
+        return System.currentTimeMillis() - this.lastActivityTime;
     }
     @Override
     public void run() {
@@ -49,11 +61,10 @@ public class ConnectionHandler implements Runnable{
                         inputCommandsByteList.get(inputCommandsByteList.size()-2)== Constants.getCommandSeperator()[0] &&
                         inputCommandsByteList.get(inputCommandsByteList.size()-1)==Constants.getCommandSeperator()[1]
                 ){
+                    updateTime();
                     byte[] newCommand = this.convertToByteArray(inputCommandsByteList);
-                    System.out.println("<><><><><><> input byte command length "+ newCommand.length);
                     inputCommandsByteList = new ArrayList<>();
                     byte[] res = decodeAndExecuteCommand(newCommand);
-
                     outputStream.write(res);
                 }
             }
