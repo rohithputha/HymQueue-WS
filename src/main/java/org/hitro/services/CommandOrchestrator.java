@@ -1,6 +1,7 @@
 package org.hitro.services;
 
 import org.hitro.binaryprotocol.publicinterfaces.IBinaryProtocol;
+import org.hitro.constants.Constants;
 import org.hitro.exceptions.HymQueueException;
 import org.hitro.publicinterfaces.HymQueue;
 import org.hitro.services.commandexecutors.*;
@@ -31,12 +32,20 @@ public class CommandOrchestrator {
 
     private byte[] encode(List<String> result){
         byte[] resByte = IBinaryProtocol.getInstance().encode(result);
-        return  resByte;
+        byte[] commandSep = Constants.getCommandSeperator();
+
+        byte[] combinedArray = new byte[resByte.length + commandSep.length];
+
+        System.arraycopy(resByte, 0, combinedArray, 0, resByte.length);
+        System.arraycopy(commandSep, 0, combinedArray, resByte.length, commandSep.length);
+
+        return  combinedArray;
     }
     public <T> byte[] orchestrate(byte[] command){
 
         try{
             List<T> commandList = this.decode(command);
+            commandList.stream().forEach(s->System.out.println(s));
             String commandName = (String) commandList.get(0);
             List<String> res = commandExecutorMap.get(commandName).execute(commandList,this.hymQueue);
             return encode(res);
