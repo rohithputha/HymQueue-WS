@@ -3,7 +3,7 @@ package org.hitro.server;
 import org.hitro.conn.ConnectionHandler;
 import org.hitro.publicinterfaces.HymQueue;
 import org.hitro.exceptions.HymQueueException;
-import org.hitro.services.ConnectionExecutors;
+
 import org.hitro.services.IdleConnectionsManager;
 
 import java.io.IOException;
@@ -33,7 +33,6 @@ public class TcpServer {
                 idleConnectionsManager.addCh(connectionHandler,thread);
                 System.out.println("Active Connection Number = "+idleConnectionsManager.getChSize());
                 thread.start();
-//                ConnectionExecutors.getInstance().addConnection(new ConnectionHandler(socket, this.hymQueue));
             }
             catch (IOException ioe){
                 throw new HymQueueException("Failed to accept socket connection",ioe);

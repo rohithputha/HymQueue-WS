@@ -6,6 +6,7 @@ import org.hitro.exceptions.HymQueueException;
 import org.hitro.publicinterfaces.HymQueue;
 import org.hitro.services.commandexecutors.*;
 
+import java.net.Socket;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,13 +42,13 @@ public class CommandOrchestrator {
 
         return  combinedArray;
     }
-    public <T> byte[] orchestrate(byte[] command){
+    public <T> byte[] orchestrate(byte[] command, Socket socket){
 
         try{
             List<T> commandList = this.decode(command);
             commandList.stream().forEach(s->System.out.println(s));
             String commandName = (String) commandList.get(0);
-            List<String> res = commandExecutorMap.get(commandName).execute(commandList,this.hymQueue);
+            List<String> res = commandExecutorMap.get(commandName).execute(commandList,this.hymQueue, socket);
             return encode(res);
         }
         catch (Exception e){

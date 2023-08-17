@@ -37,7 +37,7 @@ public class ConnectionHandler implements Runnable{
 
 
     private byte[] decodeAndExecuteCommand(byte[] commnand){
-        return commandOrchestrator.orchestrate(commnand);
+        return commandOrchestrator.orchestrate(commnand, this.socket);
     }
 
     private synchronized void updateTime(){
@@ -50,40 +50,32 @@ public class ConnectionHandler implements Runnable{
     @Override
     public void run() {
         try {
-            System.out.println("<><><><><><><> connection started");
             InputStream inputStream = socket.getInputStream();
             OutputStream outputStream = socket.getOutputStream();
             List<Byte> inputCommandsByteList = new ArrayList<>();
             int byteRead;
             while((byteRead = inputStream.read())!=-1){
-                System.out.print(byteRead +",");
                 inputCommandsByteList.add((byte)byteRead);
                 if(inputCommandsByteList.size()>2 &&
                         inputCommandsByteList.get(inputCommandsByteList.size()-2)== Constants.getCommandSeperator()[0] &&
                         inputCommandsByteList.get(inputCommandsByteList.size()-1)==Constants.getCommandSeperator()[1]
                 ){
                     updateTime();
-                    System.out.println("input bytes size ->" + inputCommandsByteList.size());
                     byte[] newCommand = this.convertToByteArray(inputCommandsByteList);
                     inputCommandsByteList = new ArrayList<>();
                     byte[] res = decodeAndExecuteCommand(newCommand);
-
-                    System.out.println(res.length);
-
                     int bytesToSend = res.length;
                     int offset=0;
                     while (bytesToSend > 0) {
-                        int bytesToWrite = Math.min(21, bytesToSend); // Write up to 21 bytes at a time
+                        int bytesToWrite = Math.min(21, bytesToSend);
                         outputStream.write(res, offset, bytesToWrite);
-                        outputStream.flush(); // Ensure immediate transmission
+                        outputStream.flush();
 
                         offset += bytesToWrite;
                         bytesToSend -= bytesToWrite;
                         System.out.println(bytesToSend);
                     }
-                    System.out.println("----><>");
-
-//                    outputStream.write(res);
+                    //                    outputStream.write(res);
                 }
             }
         } catch (IOException e) {
