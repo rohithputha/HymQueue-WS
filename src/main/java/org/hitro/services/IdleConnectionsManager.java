@@ -1,12 +1,10 @@
 package org.hitro.services;
 
 import org.hitro.conn.ConnectionHandler;
-
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentSkipListSet;
 
 public class IdleConnectionsManager implements Runnable{
     private Map<ConnectionHandler, Thread> chSet;
@@ -27,13 +25,13 @@ public class IdleConnectionsManager implements Runnable{
     }
     private void checkAndRemoveIdleConnections(){
         Set<ConnectionHandler> removedSet = new HashSet<>();
+
         for(ConnectionHandler c: this.chSet.keySet()){
-            if(c.getIdleTime() >= 900000){
+            if(c.getIdleTime() >= 5000){
                 chSet.get(c).interrupt();
                 removedSet.add(c);
             }
         }
-
         chSet.keySet().removeAll(removedSet);
     }
     @Override

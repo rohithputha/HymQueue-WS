@@ -3,6 +3,7 @@ package org.hitro.services.commandexecutors;
 import org.hitro.binaryprotocol.publicinterfaces.BinaryProtocol;
 import org.hitro.model.subscribers.SubscriberFunction;
 import org.hitro.publicinterfaces.HymOutput;
+import org.hitro.services.SocketManager;
 
 import java.io.OutputStream;
 import java.net.Socket;
@@ -27,13 +28,15 @@ public class SubscriberCallback implements SubscriberFunction {
     @Override
     public void consume(HymOutput hymOutput) {
         try {
-            Socket socket = new Socket(ip, port);
+            Socket socket = SocketManager.getInstance().get(this.ip);
             OutputStream outputStream = socket.getOutputStream();
             ArrayList hOutputList = new ArrayList<>(Arrays.asList(this.commandId,"subscriberCallback",channelName,hymOutput.toString()));
-            outputStream.write(binaryProtocol.encode(hOutputList));
+            byte[] res = binaryProtocol.encode(hOutputList);
+            outputStream.write(res);
         }
         catch (Exception e){
-
+            System.out.println("could not send the message to the subscriber");
+            System.out.println(e);
         }
     }
 }
