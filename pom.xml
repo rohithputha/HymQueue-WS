@@ -19,12 +19,13 @@
         <dependency>
             <groupId>com.github.rohithputha</groupId>
             <artifactId>HymQueue</artifactId>
-            <version>87b4dabb36</version>
+            <version>057a2dcf33</version>
         </dependency>
         <dependency>
             <groupId>com.github.rohithputha</groupId>
             <artifactId>HymProtocol</artifactId>
-            <version>953fb36f</version>
+<!--            <version>953fb36f</version>-->
+            <version>05db9ce428</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
