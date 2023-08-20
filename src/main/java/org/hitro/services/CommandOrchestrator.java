@@ -22,6 +22,7 @@ public class CommandOrchestrator {
         commandExecutorMap.put("add_data",new AddDataCommandExecutor());
         commandExecutorMap.put("add_subscriber", new AddSubscriberCommandExecutor());
         commandExecutorMap.put("get_data", new GetDataCommandExecutor());
+        commandExecutorMap.put("register_socket", new SocketRegisterCommandExecutor());
     }
     private <T,V> List<T> decode(byte[] command){
         V commandList = (V) IBinaryProtocol.getInstance().decode(command);
@@ -32,21 +33,14 @@ public class CommandOrchestrator {
     }
 
     private byte[] encode(List<String> result){
-        byte[] resByte = IBinaryProtocol.getInstance().encode(result);
-        byte[] commandSep = Constants.getCommandSeperator();
-
-        byte[] combinedArray = new byte[resByte.length + commandSep.length];
-
-        System.arraycopy(resByte, 0, combinedArray, 0, resByte.length);
-        System.arraycopy(commandSep, 0, combinedArray, resByte.length, commandSep.length);
-
-        return  combinedArray;
+        return IBinaryProtocol.getInstance().encode(result);
     }
     public <T> byte[] orchestrate(byte[] command, Socket socket){
 
         try{
             List<T> commandList = this.decode(command);
-            commandList.stream().forEach(s->System.out.println(s));
+            commandList.stream().forEach(s->System.out.print(s+","));
+            System.out.println();
             String commandName = (String) commandList.get(0);
             List<String> res = commandExecutorMap.get(commandName).execute(commandList,this.hymQueue, socket);
             return encode(res);

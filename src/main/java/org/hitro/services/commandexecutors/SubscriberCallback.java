@@ -31,10 +31,12 @@ public class SubscriberCallback implements SubscriberFunction {
             Socket socket = SocketManager.getInstance().get(this.ip);
             OutputStream outputStream = socket.getOutputStream();
             ArrayList hOutputList = new ArrayList<>(Arrays.asList(this.commandId,"subscriberCallback",channelName,hymOutput.toString()));
-            outputStream.write(binaryProtocol.encode(hOutputList));
+            byte[] res = binaryProtocol.encode(hOutputList);
+            outputStream.write(res);
         }
         catch (Exception e){
             System.out.println("could not send the message to the subscriber");
+            System.out.println(e);
         }
     }
 }

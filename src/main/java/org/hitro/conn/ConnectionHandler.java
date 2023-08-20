@@ -1,5 +1,6 @@
 package org.hitro.conn;
 
+import lombok.Getter;
 import org.hitro.constants.Constants;
 import org.hitro.exceptions.HymQueueException;
 import org.hitro.publicinterfaces.HymQueue;
@@ -14,6 +15,7 @@ import java.util.List;
 
 public class ConnectionHandler implements Runnable{
 
+    @Getter
     private final Socket socket;
     private final HymQueue hymQueue;
     private final CommandOrchestrator commandOrchestrator;
@@ -50,11 +52,10 @@ public class ConnectionHandler implements Runnable{
     @Override
     public void run() {
         try {
-            InputStream inputStream = socket.getInputStream();
             OutputStream outputStream = socket.getOutputStream();
             List<Byte> inputCommandsByteList = new ArrayList<>();
             int byteRead;
-            while((byteRead = inputStream.read())!=-1){
+            while((byteRead = socket.getInputStream().read())!=-1){
                 inputCommandsByteList.add((byte)byteRead);
                 if(inputCommandsByteList.size()>2 &&
                         inputCommandsByteList.get(inputCommandsByteList.size()-2)== Constants.getCommandSeperator()[0] &&
@@ -73,7 +74,6 @@ public class ConnectionHandler implements Runnable{
 
                         offset += bytesToWrite;
                         bytesToSend -= bytesToWrite;
-                        System.out.println(bytesToSend);
                     }
                     //                    outputStream.write(res);
                 }

@@ -12,7 +12,6 @@ public class AddDataCommandExecutor<V> implements CommandExecutor<V>{
     @Override
     public List<String> execute(List<V> command, HymQueue hymQueue, Socket socket) {
         try{
-            System.out.println(command);
             hymQueue.add(command.get(2),(String) command.get(3),(String)command.get(4));
             return new ArrayList<>(Arrays.asList(getCommandId(command), Constants.getSuccess()));
         }
