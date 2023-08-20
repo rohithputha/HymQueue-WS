@@ -27,7 +27,7 @@ public class IdleConnectionsManager implements Runnable{
         Set<ConnectionHandler> removedSet = new HashSet<>();
 
         for(ConnectionHandler c: this.chSet.keySet()){
-            if(c.getIdleTime() >= 5000){
+            if(c.getIdleTime() >= 900000){
                 chSet.get(c).interrupt();
                 removedSet.add(c);
             }
