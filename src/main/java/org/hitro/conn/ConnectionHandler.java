@@ -69,9 +69,10 @@ public class ConnectionHandler implements Runnable{
                     int offset=0;
                     while (bytesToSend > 0) {
                         int bytesToWrite = Math.min(21, bytesToSend);
-                        outputStream.write(res, offset, bytesToWrite);
-                        outputStream.flush();
-
+                        synchronized (outputStream){
+                            outputStream.write(res, offset, bytesToWrite);
+                            outputStream.flush();
+                        }
                         offset += bytesToWrite;
                         bytesToSend -= bytesToWrite;
                     }
